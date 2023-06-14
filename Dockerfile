@@ -9,7 +9,6 @@ WORKDIR $APP_HOME
 COPY requirements.txt .
 
 # Menginstal dependensi yang diperlukan
-RUN install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install gunicorn
 
