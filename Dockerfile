@@ -1,22 +1,18 @@
-# Menggunakan image Python sebagai base image
-FROM python:3.9
+# Use the official lightweight Python image.
+# https://hub.docker.com/_/python
+FROM python:3
 
-# Menentukan direktori kerja di dalam container
+# Allow statements and log messages to immediately appear in the Knative logs
+ENV PYTHONUNBUFFERED True
+
+# Copy local code to the container image.
 ENV APP_HOME /app
 WORKDIR $APP_HOME
-
-# Menyalin file requirements.txt ke dalam container
-COPY requirements.txt .
-
-# Menginstal dependensi yang diperlukan
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install gunicorn
-
-# Menyalin seluruh isi direktori proyek ke dalam container
 COPY . ./
 
-# Menjalankan perintah untuk menjalankan aplikasi Flask
-CMD ["python", "main.py"]
+# Install production dependencies.
+RUN pip install -r requirements.txt
+RUN pip install gunicorn
 
 # Run the web service on container startup. Here we use the gunicorn
 # webserver, with one worker process and 8 threads.
